@@ -1,27 +1,36 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { getKeyWords, add, remove, edit, subtractAmount } from './keyWordsFeature/keyWordsSlice';
+import { useSelector } from 'react-redux';
+import { getRawKeywords } from './keywordsFeature/slices/rawKeywordsSlice';
+import { getSortedKeywords } from './keywordsFeature/slices/sortedKeywordsSlice';
+import useRawKeywords from './keywordsFeature/hooks/useRawKeywords';
+import RawKeywordComponent from './keywordsFeature/components/RawKeywordComponent';
+import SortedKeywordComponent from './keywordsFeature/components/SortedKeywordComponent';
 
 const App = () => {
-  const dispatch = useDispatch();
-  const keyWords = useSelector(getKeyWords);
+  const rawKeywords = useSelector(getRawKeywords);
+  const sortedKeywords = useSelector(getSortedKeywords);
+  const {
+    inputValue,
+    handleInput,
+    handleAdd,
+  } = useRawKeywords();
 
   return (
     <main>
-      <section>
-        {keyWords.map(({id, name, amount}) => (
-          <div key={id} style={{display: 'flex', margin: '0 0 10px 0'}}>
-            <p>{name}</p>&nbsp;&nbsp;
-            <p>amount: {amount}</p>&nbsp;&nbsp;
-            <button onClick={() => dispatch(remove({name, id}))}>Remove me</button>
-            <button onClick={() => dispatch(subtractAmount({id}))}>subtract one</button>
-          </div>
-        ))}
-        <input type="text" onBlur={({target: { value }}) => value && dispatch(add(value))} />
-      </section>
+      <div style={{ display: 'flex' }}>
+        <section style={{ width: '50%' }}>
+          <p>Raw keywords</p>
+          {rawKeywords.map(rawKeyword => <RawKeywordComponent key={rawKeyword.id} {...rawKeyword} />)}
+          <input type="text" value={inputValue} onChange={handleInput} />
+          <button onClick={handleAdd}>Add your keyword</button>
+        </section>
+        <section style={{ width: '50%' }}>
+          <p>Sorted keywords</p>
+          {sortedKeywords.map(([name, amount]) => <SortedKeywordComponent key={name} name={name} amount={amount} />)}
+        </section>
+      </div>
     </main>
   );
 };
-
 
 export default App;
