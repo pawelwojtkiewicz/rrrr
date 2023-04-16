@@ -8,7 +8,7 @@ const RawKeywordComponent = ({ id, name }) => {
     return (
       <div style={{ margin: '0 0 10px 0' }}>
         <p style={{ display: 'inline-block', margin: '0 5px 0 0' }}>{name}</p>
-        <button onClick={() => dispatch(removeRawKeyword({id}))}>Remove me</button>
+        <button onClick={() => dispatch(removeRawKeyword({ id, name }))}>Remove me</button>
     </div>
 )};
 
