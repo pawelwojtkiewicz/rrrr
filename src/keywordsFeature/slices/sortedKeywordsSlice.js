@@ -1,6 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { 
+    saveSortedKeywordToLocalStorage,
+    removeSortedKeywordFromLocalStorage,
+} from '../tools/handleLocalStorage';
+import { getInitialSortedKeywordsLocalStorage } from '../tools/handleLocalStorage';
 
-const initialState = {};
+const initialState = getInitialSortedKeywordsLocalStorage();
 
 export const sortedKeywordsSlice = createSlice({
     name: 'sortedKeywords',
@@ -12,6 +17,7 @@ export const sortedKeywordsSlice = createSlice({
             } else {
                 state[keyword] = 1;
             }
+            saveSortedKeywordToLocalStorage(keyword);
         },
         removeSortedKeywords: (state, { payload: { keyword = '' }}) => {
             if (state[keyword] > 1) {
@@ -19,6 +25,7 @@ export const sortedKeywordsSlice = createSlice({
             } else {
                 delete state[keyword]; 
             }
+            removeSortedKeywordFromLocalStorage(keyword);
         },
     },
 });

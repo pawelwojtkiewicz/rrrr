@@ -1,18 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { v4 as uuid } from 'uuid';
+import { 
+    saveRawKeywordToLocalStorage,
+    removeRawKeywordFromLocalStorage,
+} from '../tools/handleLocalStorage';
+import { getInitialRawKeywordsLocalStorage } from '../tools/handleLocalStorage';
 
-const initialState =  [];
+const initialState = getInitialRawKeywordsLocalStorage();
 
 export const rawKeywordsSlice = createSlice({
     name: 'rawKeywords',
     initialState,
     reducers: {
         addRawKeyword: (state, { payload: { name = "" }}) => {
-            name && state.push({id: uuid(), name})
+            if (name) {
+                const keywordData = { id: uuid(), name };
+                state.push(keywordData);
+                saveRawKeywordToLocalStorage(keywordData);
+            }
         },
         removeRawKeyword: (state, { payload: { id }}) => {
             const newRawKeywords = state.filter((word) => word.id !== id);
             state.splice(0, state.length, ...newRawKeywords);
+            removeRawKeywordFromLocalStorage(id);
         },
     },
 });
