@@ -36,7 +36,7 @@ const useMyHook = () => {
     };
 
     const getDataFromWebPages = async () => {
-        const response = await fetch(`http://localhost:3000/api/getPage?webpage=${inputValue}`);
+        const response = await fetch(`https://test.elgof.io/api/getPage?webpage=${inputValue}`);
         const { text } = await response.json();
 
         const sortedWords = sortWords(text);
